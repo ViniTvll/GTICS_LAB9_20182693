@@ -1,6 +1,6 @@
 package com.example.gtics_lab9_20182693.controller;
-import com.example.gtics_lab9_20182693.entity.Coctel;
-import com.example.gtics_lab9_20182693.repository.CoctelRepository;
+import com.example.gtics_lab9_20182693.dao.CoctelDao;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,19 +12,15 @@ import java.util.List;
 @RequestMapping("/coctel")
 public class CoctelController {
 
-final CoctelRepository coctelRepository;
-public CoctelController(CoctelRepository coctelRepository) {
-    this.coctelRepository = coctelRepository;
-}
+    final CoctelDao coctelDao;
 
-    private static final String URL_COCKTAILS = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=Cocktail";
+    public CoctelController(CoctelDao coctelDao) {
 
-
-    //LISTAR
-    @GetMapping(value = {"/list", ""})
-    public List<Coctel> listaCocteles() {
-        return coctelRepository.findAll();
+        this.coctelDao = coctelDao;
     }
-
-
+    @GetMapping({"/list", "", "/"})
+    public String listarProductos(Model model) {
+        model.addAttribute("listaCocteles", coctelDao.listar());
+        return "product/list";
+    }
 }
